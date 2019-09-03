@@ -5,6 +5,12 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="https://jabont.com/jayss/jayss.css">
 </head>
+<style>
+	.fa-star{
+		opacity: .2;
+		cursor: pointer;
+	}
+</style>
 <body class="screen v-middle-flex">
 	<div class="to-center cont-pd">
 		<theboxes class="middle">
@@ -12,23 +18,28 @@
 				<i class="fas fa-chevron-left" onclick="clickLeft()"></i>
 			</box>
 			<box col="6">
-				<div class="bg-white round shadow padding-l">
+				<div class="bg-white round shadow padding-l" >
+					<div class="t-right">
+						<i class="fas fa-star cl-amber"  id="u_fav" onclick="fav"></i>
+					</div>
+					<sp class="l"></sp>
 					<!-- username -->
-					<h1 class="cl-purple-a4">@<span>_______</span></h1>
+					<img src=""class="circle shadow"id="u_profile">
+					<h1 class="cl-purple-a4">@<span id="u_username">_______</span></h1>
 					<!-- city -->
-					<h4><i class="fas fa-map-marker-alt"></i> <span>_______</span></h4>
+					<h4><i class="fas fa-map-marker-alt"></i> <span id="u_city">_______</span></h4>
 					<sp></sp>
 					<!-- name -->
-					<h2>_______ _______</h2>
+					<h2 id="u_name">_______ _______</h2>
 					<!-- company -->
-					<p>_______</p>
+					<p id="u_company">_______</p>
 					<p></p>
 					<sp></sp>
 					<p>
 						<!-- web -->
-						<i class="fas fa-globe-americas"></i> <a href="_______">_______</a> &nbsp;&nbsp;
+						<i class="fas fa-globe-americas"></i> <a href="_______" id="u_web">_______</a> &nbsp;&nbsp;
 						<!-- email -->
-						<i class="fas fa-envelope"></i> <a href="mailto:_______">_______</a>
+						<i class="fas fa-envelope"></i> <a href="mailto:_______" id="u_mail">_______</a>
 					</p>
 					
 				</div>
@@ -43,22 +54,45 @@
 
 		nowIndex = 0;
 		user = [];
+		fav = [0,0,0,0,0,0,0,0,0,0];
 		fetch('https://jsonplaceholder.typicode.com/users')
 		.then(response => response.json())
 		.then(json => ready(json))
 
 		function ready(json){
 			console.log(json);
+			if (localStorage.nowIndex != undefined) {nowIndex = localStorage.nowIndex;}
+			user = json;
+			renData();
+		}
+		function renData(){
+			u_profile.src = `https://picsum.photos/id/${user[nowIndex].id}/200/200`;
 			// เขียนต่อ ให้ข้อมูลคนแรก ไปแสดงผลบนหน้าเว็บ
-			// user = _______?
+			
+			u_username.innerText = user[nowIndex].username
+			u_name.innerText = user[nowIndex].name
+			u_city.innerText = user[nowIndex].address.city
+			u_company.innerText = user[nowIndex].company.name
+			u_web.innerText = user[nowIndex].website
+			u_web.setAttribute('href',"https://"+user[nowIndex].website)
+			u_mail.innerText = user[nowIndex].email
 		}
 
 		function clickRight(){
-			// เลื่อนไปด้านขวา เช่นจาก id1 ไป id2 ถ้าเป็น id10 แล้วกดอีกจะกลับไป id1
+			nowIndex++;
+			if (nowIndex>9) {nowIndex=0};
+			renData();
+			localStorage.nowIndex = nowIndex;
 		}
 
 		function clickLeft(){
-			// เลื่อนไปด้านซ้าย เช่นจาก id10 ไป id9 ถ้าเป็น id1 แล้วกดอีกจะกลับไป id1
+			nowIndex--;
+			if (nowIndex<0) {nowIndex=9};
+			renData();
+			localStorage.nowIndex = nowIndex;
+		}
+		function fav(){
+			u_fav.style.opacity
 		}
 	</script>
 </body>
